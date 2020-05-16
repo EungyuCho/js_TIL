@@ -52,6 +52,8 @@ console.log(Object.getPrototypeOf(mark));
 
 */
 
+/*
+
 // Primitive : call by value
 var a = 23;
 var b = a;
@@ -87,8 +89,84 @@ change(age, obj);
 
 console.log(age);       //원시값이므로 함수에서 값을 전달받았을뿐이기때문에 a는 바뀌지않음
 console.log(obj.city);  //값에대한 주소를 넘겨주므로 데이터가 변경되었다!!
-
+*/
 
 /////////////////////////////
 // Lecture: Passing functions as arguments
-/*
+
+
+var years = [1990, 1965, 1937, 2005, 1998];
+
+//배열을 돌면서 함수를 인자로 받아서 함수를 실행한 결과를 새로운 배열에 추가해주고 loop가 끝나면 리턴해줌
+function arrayCalc(arr, fn){
+    var arrRes = [];
+    for(var i = 0; i < arr.length; i++){
+        arrRes.push(fn(arr[i]));
+    }
+    return arrRes;
+}
+//Call back functions
+
+function calculateAge(el){
+    return new Date().getFullYear() - el;
+}
+
+function isFullAge(el) {
+    return el >= 18;
+}
+
+function maxHeartRate(el) {
+    if (el >= 18 && el <= 81) {
+        return Math.round(206.9 - (0.67 * el));
+    } else {
+        return -1;
+    }
+}
+
+
+var ages = arrayCalc(years, calculateAge);
+var fullAges = arrayCalc(ages, isFullAge);
+var rates = arrayCalc(ages, maxHeartRate);
+
+console.log(ages.toString());
+console.log(fullAges.toString());
+console.log(rates.toString());
+
+
+
+/////////////////////////////
+// Lecture: Functions returning functions
+
+function interviewQuestion(job) {
+    if (job === 'designer') {
+        return function(name) {
+            console.log(name + ', can you please explain what UX design is?');
+        }
+    } else if (job === 'teacher') {
+        return function(name) {
+            console.log('What subject do you teach, ' + name + '?');
+        }
+    } else {
+        return function(name) {
+            console.log('Hello ' + name + ', what do you do?');
+        }
+    }
+}
+//리턴한 함수를 할당받음
+var teacherQuestion = interviewQuestion('teacher');     
+var designerQuestion = interviewQuestion('designer');
+var unknownQuestion = interviewQuestion('unknown');
+
+teacherQuestion('John');
+designerQuestion('John');
+designerQuestion('jane');
+designerQuestion('Mark');
+designerQuestion('Mike');
+unknownQuestion('Sara');
+
+console.log(teacherQuestion.toString());  // function(name) { console.log('What subject do you teach, ' + name + '?'); }
+console.log(designerQuestion.toString()); // function(name) { console.log(name + ', can you please explain what UX design is?'); }
+console.log(unknownQuestion.toString()); // function(name) { console.log(name + ', can you please explain what UX design is?'); }
+
+interviewQuestion('teacher')('Mark');
+
