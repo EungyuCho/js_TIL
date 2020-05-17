@@ -93,7 +93,7 @@ console.log(obj.city);  //값에대한 주소를 넘겨주므로 데이터가 �
 
 /////////////////////////////
 // Lecture: Passing functions as arguments
-
+/*
 
 var years = [1990, 1965, 1937, 2005, 1998];
 
@@ -170,3 +170,23 @@ console.log(unknownQuestion.toString()); // function(name) { console.log(name + 
 
 interviewQuestion('teacher')('Mark');
 
+*/
+
+/////////////////////////////////
+// Lecture : IIFE
+/*
+function game(){
+    var score = Math.random() * 10;
+    console.log(score >= 5);
+}
+game();
+*/
+(function(){
+    var score = Math.random() * 10;
+    console.log(score >= 5);
+})();
+
+(function(goodLuck){
+    var score = Math.random() * 10;
+    console.log(score >= 5 - goodLuck);
+    })(5);
