@@ -199,6 +199,7 @@ game();
 // Lecture : Closures
 // 클로저는 함수의 선언 위치에 따라서 결정되는 렉시컬 스코핑에서 외부함수가 내부함수보다 더 오래
 // 유지되는 경우 외부함수 밖에서 내부함수가 호출 되더라도 외부함수의 지역변수(a)에 접근할 수 있다.
+/*
 function retirement(retirementAge){
     var a = ' years left until retirement.';
     return function(yearOfBirth){
@@ -215,23 +216,21 @@ retirementGermany(1990);
 retirementUS(1990);
 retirementIceland(1990);
 
-/*
-function interviewQuestion(job) {
-    if (job === 'designer') {
-        return function(name) {
-            console.log(name + ', can you please explain what UX design is?');
-        }
-    } else if (job === 'teacher') {
-        return function(name) {
-            console.log('What subject do you teach, ' + name + '?');
-        }
-    } else {
-        return function(name) {
-            console.log('Hello ' + name + ', what do you do?');
-        }
-    }
-}
-*/
+// function interviewQuestion(job) {
+//     if (job === 'designer') {
+//         return function(name) {
+//             console.log(name + ', can you please explain what UX design is?');
+//         }
+//     } else if (job === 'teacher') {
+//         return function(name) {
+//             console.log('What subject do you teach, ' + name + '?');
+//         }
+//     } else {
+//         return function(name) {
+//             console.log('Hello ' + name + ', what do you do?');
+//         }
+//     }
+// }
 
 
 function interviewQuestion(job){
@@ -258,3 +257,72 @@ var programmer = interviewQuestion('programmer');
 design('mina');
 teacher('minsu');
 programmer('robot');
+*/
+
+
+
+/////////////////////////////////
+// Lecture : Bind, call and apply
+
+var john = {
+    name : 'john',
+    age : 26,
+    job : 'teacher',
+    presentation: function(style, timeOfDay){
+        if(style === 'fomal'){
+            console.log('Good ' + timeOfDay + ', Ladies and gentlemen! I\'m ' 
+            + this.name + ', I\'m a ' + this.job + ' and I\'m '+this.age +'years old.');
+        }else if(style === 'friendly'){
+            console.log('Hey! What\'s up? I\'m ' + this.name + ', I\'m a ' + this.job + 'and I\'m '
+            +this.age +'years old. Have a nice ' + timeOfDay +'.');
+        }
+    }
+}
+
+var emily = {
+    name : 'emily',
+    age : 35,
+    job : 'designer',
+
+}
+
+john.presentation('fomal', 'morning');
+john.presentation.call(emily, 'friendly', 'afternoon');     //call은 인자를 하나씩 넣어서 호출
+
+//john.presentation.apply(emily, ['friendly', 'afternoon']);    // apply는 인자를 배열형태로 넣어줌
+
+var johnFriendly = john.presentation.bind(john, 'friendly');    //bind는 호출하지않고 인수를 할당만해줌
+
+johnFriendly('morning');
+
+var emilyFormal = john.presentation.bind(emily, 'fomal');
+
+emilyFormal('night');
+
+
+var years = [1990, 1965, 1937, 2005, 1998];
+
+//배열을 돌면서 함수를 인자로 받아서 함수를 실행한 결과를 새로운 배열에 추가해주고 loop가 끝나면 리턴해줌
+function arrayCalc(arr, fn){
+    var arrRes = [];
+    for(var i = 0; i < arr.length; i++){
+        arrRes.push(fn(arr[i]));
+    }
+    return arrRes;
+}
+//Call back functions
+
+function calculateAge(el){
+    return new Date().getFullYear() - el;
+}
+
+function isFullAge(limit, el) {
+    return el >= limit;
+}
+
+var ages = arrayCalc(years, calculateAge);
+
+var fullJapan = arrayCalc(ages, isFullAge.bind(this, 20));
+
+console.log(ages);
+console.log(fullJapan);
