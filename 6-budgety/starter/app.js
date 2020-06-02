@@ -86,8 +86,6 @@ const budgetController = (function(){
                 return current.id;
             });
 
-            console.log("ids는"+ids);
-            console.log("id는"+id);
             index = ids.indexOf(id);
 
             if(index !== -1){
@@ -158,6 +156,31 @@ const UIController = (function(){
         expensesPercLabel: '.item__percentage'
     };
 
+    const formatNumber =  function(num, type){
+        let numSplit, int ,dec;
+        /*
+        + or - before number
+        exactly 2 mecimal points
+        comma seperating the thousands
+        
+        2010.4567 -> + 2,310.46
+        2000 -> + 2,000.00
+         */
+
+        num = Math.abs(num);
+        num = num.toFixed(2);
+
+        console.log(num)
+        numSplit = num.split('.');
+        int = numSplit[0];
+        if(int.length > 3) {
+            int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3);
+        }
+        dec = numSplit[1];
+
+        return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+    };
+
     return{
         getinput: function(){
             return{
@@ -179,7 +202,9 @@ const UIController = (function(){
                 element = DOMStrings.expensesContainer;
             }
             //Replace the placeholder text with some actual data
-            newHTML = html.replace('%id%', obj.id).replace('%description%', obj.description).replace('%value', obj.value);
+            newHTML = html.replace('%id%', obj.id)
+            newHTML = newHTML.replace('%description%', obj.description)
+            newHTML = newHTML.replace('%value', formatNumber(obj.value, type));
             //Insert the HTML into DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHTML);
         },
@@ -203,7 +228,10 @@ const UIController = (function(){
         },
 
         displayBudget: function(obj){
-            document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+            let type;
+            type = obj.budget > 0 ? type = 'inc' : type = 'exp';
+
+            document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget, type);
             document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
             document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
 
