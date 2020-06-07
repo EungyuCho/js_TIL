@@ -7,7 +7,7 @@ var ages5 = years.map(function (el) {
     return 2020 - el;
 });
 
-console.log(ages5);
+// console.log(ages5);
 
 //ES6
 
@@ -24,7 +24,7 @@ ages6 = years.map((el, index) => {
     return `Age element ${index + 1}:${age}`
 });
 
-console.log(ages6);
+// console.log(ages6);
 
 //Arrow functions2
 
@@ -60,7 +60,7 @@ const box6 = {
     }
 }
 
-box6.clickMe();
+// box6.clickMe();
 
 /*
 const box66 = {
@@ -94,7 +94,7 @@ Person.prototype.myFriends5 = function (friend) {
 
 var friends = ['Bob', 'Jane', 'Makr'];
 
-new Person('John').myFriends5(friends);
+// new Person('John').myFriends5(friends);
 
 //ES6
 
@@ -103,4 +103,43 @@ Person.prototype.myFriends6 = function (friend) {
     console.log(arr)
 };
 
-new Person('John').myFriends6(friends);
+// new Person('John').myFriends6(friends);
+
+
+//Destructuring
+
+//ES5
+var john = ['John', 26];
+// var name = john[0];
+// var age = john[1];
+/*
+//ES6
+const [name, age] = ['John', 26];
+console.log(name)
+console.log(age)
+
+const obj = {
+    firstName: 'John',
+    lastName: 'Smith'
+};
+
+const {firstName, lastName} = obj;
+
+console.log(firstName)
+console.log(lastName)
+
+const {firstName: a, lastName: b} = obj;
+
+console.log(a)
+console.log(b)
+
+ */
+function calcAgeRetirement(year) {
+    const age = new Date().getFullYear() - year;
+    return [age, 65 - age];
+}
+
+const [age, retirement] = calcAgeRetirement(1990);
+
+console.log(age)
+console.log(retirement)
