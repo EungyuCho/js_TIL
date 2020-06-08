@@ -87,7 +87,7 @@ function Person(name) {
 //ES5
 Person.prototype.myFriends5 = function (friend) {
     var arr = friend.map(function (el) {
-       return this.name + ' is friends with ' + el;
+        return this.name + ' is friends with ' + el;
     }.bind(this));
     console.log(arr)
 };
@@ -143,3 +143,49 @@ const [age, retirement] = calcAgeRetirement(1990);
 
 console.log(age)
 console.log(retirement)
+
+// Arrays
+
+const boxes = document.querySelectorAll('.box');
+
+//ES5
+
+var boxesArr5 = Array.prototype.slice.call(boxes);
+boxesArr5.forEach(function (cur) {
+    cur.style.background = 'dodgerblue';
+})
+
+
+//ES6
+const boxesArr6 = Array.from(boxes);
+boxesArr6.forEach(cur => cur.style.background = 'dodgerred');
+
+//ES5
+/*
+for (var i = 0; i < boxesArr5.length; i++) {
+    if (boxesArr5[i].classList.contains('blue'))
+        continue;
+    boxesArr5[i].textContent = 'I changed to blue!';
+}
+ */
+
+//ES6
+for (const cur of boxesArr6){
+    if(!cur.className.includes('blue'))
+        cur.textContent = 'I chaneged to blue!';
+}
+
+//ES5
+var ages = [12, 17, 8, 21, 14, 11];
+var full = ages.map(function (cur) {
+    return cur>=18
+})
+
+console.log(full)
+
+console.log(full.indexOf(true));
+console.log(ages[full.indexOf(true)])
+
+//ES6
+console.log(ages.findIndex(cur => cur>=18));
+console.log(ages.find(cur => cur>=18));

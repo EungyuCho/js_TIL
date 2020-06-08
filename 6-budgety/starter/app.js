@@ -2,7 +2,7 @@
 
 // BUDGET CONTROLLER
 const budgetController = (function(){
-    
+
     const Expense = function(id, description, value){
         this.id = id;
         this.description = description;
@@ -390,3 +390,4 @@ const controller = (function(budgetController, UICtrl){
 })(budgetController, UIController);
 
 controller.init();
+    console.log(this)
