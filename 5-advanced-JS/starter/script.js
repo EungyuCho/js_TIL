@@ -1,136 +1,82 @@
-/*
-//Function constructor
-
-var john = {
-    name: 'john',
-    yearOfBirth: 1990,
-    job: 'teacher'
-};
-
-var Person = function (name, yearOfBirth, job) {
-    this.name = name;
-    this.yearOfBirth = yearOfBirth;
-    this.job = job;
-};
-
-Person.prototype.lastName = 'Smith';
-Person.prototype.calculateAge = function () {
-    console.log(2020 - this.yearOfBirth);
+function Question({question, answers, correct}) {
+    this.question = question;
+    this.answers = answers;
+    this.correct = correct;
 }
 
-var john = new Person('john', 1990, 'teacher');
-var jane = new Person('Jane', 1969, 'designer');
-var mark = new Person('Mark', 1948, 'retired');
+Question.prototype.displayQuestion = function () {
+    console.log(this.question);
 
-john.calculateAge();
-jane.calculateAge();
-mark.calculateAge();
-
-console.log(john.lastName);
-console.log(jane.lastName);
-*/
-
-/*
-// Primitives vs objects
-
-// Primitives
-var a = 23;
-var b = a;
-a = 46;
-console.log(a);
-console.log(b);
-
-
-// Objects
-var obj1 = {
-    name: 'John',
-    age: 26
-}
-
-var obj2 = obj1;
-
-obj1.age = 30;
-console.log(obj1.age);
-console.log(obj2.age);
-
-// Functions
-var age = 27;
-var obj = {
-    name: 'Jonas',
-    city: 'Lisbon',
+    for (var i = 0; i < this.answers.length; i++) {
+        console.log(i + ':' + this.answers[i]);
+    }
 };
 
-function change(a, b) {
-    a = 30;
-    b.city = 'San Francisco'
-}
-
-change(age, obj);
-
-console.log(age);
-console.log(obj.city);
-*/
-
-/*
-///////////////////////////////
-// Lectures : Passing functions as arguments
-
-var years = [1990, 1965, 1937, 2005, 1998];
-
-function arrayCalc(arr, fn) {
-    var arrResult = [];
-    for (var i = 0; i < arr.length; i++) {
-        arrResult.push(fn(arr[i]));
+Question.prototype.checkAnswer = function (ans, callback) {
+    var sc;
+    if (ans === this.correct) {
+        console.log('Correct answer!');
+        sc = callback(true);
+        this.displayScore(sc);
+        return;
     }
 
-    return arrResult;
+    console.log('Wrong answer!');
+    sc = callback(false);
+    this.displayScore(sc);
+};
+
+Question.prototype.displayScore = (score) => {
+    console.log(`Your current score is: ${score}`);
+    console.log('-------------------------------');
 }
 
-function calculateAge(el) {
-    return 2020 - el;
-}
-
-function isFullAge(el) {
-    return el >= 18;
-}
-
-function maxHeartRate(el) {
-    if (el >= 18 && el <= 81)
-        return Math.round(206.9 - (0.67 * el));
-
-    return -1;
-}
-
-var ages = arrayCalc(years, calculateAge);
-var fullAges = arrayCalc(ages, isFullAge);
-var rates = arrayCalc(ages, maxHeartRate);
-console.log(ages);
-console.log(fullAges);
-console.log(rates);
-*/
-
-///////////////////////////////////////
-//// Lecture : Functions returning functions
-
-function interviewQuestion(job) {
-    if (job === 'designer') {
-        return (name) => {
-            console.log(name + ', can you please explain what UX design is?');
+function score() {
+    var sc = 0;
+    return (correct) => {
+        if (correct) {
+            sc++;
         }
-    } else if (job === 'teacher') {
-        return (name) => {
-            console.log('What subject do you teach, ' + name + '?');
-        };
-    } else {
-        return (name) => {
-            console.log('Hello ' + name + ', what do you do?');
-        }
+        return sc;
     }
 }
 
-var teacherQuestion = interviewQuestion('teacher');
-var designerQuestion = interviewQuestion('designer');
-teacherQuestion('John');
-designerQuestion('jane');
-designerQuestion('Mark');
-interviewQuestion('teacher')('Mike');
+var keepScore = score();
+
+var q1 = new Question({
+    question: 'Is JavaScript hte coolest programming language in the world?',
+    answers: ['Yes', 'No'],
+    correct: 0
+});
+
+var q2 = new Question({
+    question: `What is the name of this course's teacher?`,
+    answers: ['John', 'Micheal', 'Jonas'],
+    correct: 2
+});
+
+var q3 = new Question({
+    question: `What does best describe coding?`,
+    answers: ['Boring', 'Hard', 'Fun', 'Tediuos'],
+    correct: 2
+});
+
+
+
+var questions = [q1, q2, q3];
+
+function nextQuestion() {
+    var n = Math.floor(Math.random() * questions.length);
+
+    questions[n].displayQuestion();
+
+    var answer = parseInt(prompt('Plesase select the correct answer.'));
+
+    if (answer !== 'exit') {
+        questions[n].checkAnswer(answer, keepScore);
+
+        nextQuestion();
+    }
+}
+
+nextQuestion();
