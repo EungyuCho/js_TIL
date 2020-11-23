@@ -1,8 +1,53 @@
  // BUDGET CONTROLLER
 const budgetController = (function () {
 
-    // Some code
+    const Expense = function ({id, description, value}) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
 
+    const Income = function ({id, description, value}) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+
+    const data = {
+        allItems: {
+            exp: [],
+            inc: []
+        },
+        totals: {
+            exp: 0,
+            inc: 0
+        }
+    };
+
+    return {
+        addItem: ({type, des, val}) => {
+            let newItem, ID;
+
+            // Create new ID
+            if (data.allItems[type].length > 0)
+                ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+            else
+                ID = 0;
+
+            // Create new item based on 'inc' or 'exp' type
+            if (type === 'exp') {
+                newItem  = new Expense({id: ID, description: des, value: val});
+            } else if (type === 'inc') {
+                newItem = new Income({id: ID, description: des, value: val});
+            }
+
+            // Push it into our data structure
+            data.allItems[type].push(newItem);
+
+            // Return the new element
+            return newItem;
+        }
+    }
 })();
 
 const UIController = (function () {
@@ -48,19 +93,21 @@ const controller = (function (budgetCtrl, UICtrl) {
 
 
     const ctrlAddItem = () => {
+
+        // 1. Get the field input data
         const input = UICtrl.getInput();
-        console.log(input);
+
+        // 2. Add the item to the budget controller
+        const newItem = budgetCtrl.addItem({type: input.type, des: input.description, val: input.value});
+
+        console.log(newItem);
+        // 3. Add the item to the UI
+
+        // 4. Calculate the budget
+
+        // 5. Display the budget on the UI
     };
 
-    // 1. Get the field input data
-
-    // 2. Add the item to the budget controller
-
-    // 3. Add the item to the UI
-
-    // 4. Calculate the budget
-
-    // 5. Display the budget on the UI
 
     return {
         init: () => {
